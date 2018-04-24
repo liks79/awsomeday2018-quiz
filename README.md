@@ -1,5 +1,5 @@
 # awsomeday2018-quiz
-This is a repository of the quiz app used for the AWSomeDay-Seoul event on April 18, 2018. It is a real-time quiz event application. This application was used at the AWSomeDay event on April 18, 2018. After the session is over, if the QRCode screen which containing the URL scanned successfully opened, the user will be connected in real time to input the correct answer of the quiz and draw the right answer.
+This is a repository of the quiz app used for the AWSomeDay-Seoul event on April 18, 2018. It is a real-time quiz event application. This application used at the AWSomeDay event on April 18, 2018.  The quiz event went on the end of each session. The participants could scan QRCode or type short-URL for the event. They could connect to event webpage and submit the answer. After a while draw the right answer.
 
 # Architecture
 ![Alt Architecture Diagram](diagram.png "awsomeday2018-quiz app architecture")
