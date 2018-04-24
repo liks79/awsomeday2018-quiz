@@ -236,3 +236,5 @@ Enjoy it!
 
 Thanks.
 
+![Alt live photo](live.jpg "awsomeday2018-quiz live")
+
