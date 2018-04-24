@@ -196,8 +196,8 @@ aws cognito-identity set-identity-pool-roles \
 ## Step 8
 Now you can modify the code of `index.html` and `draw.html` files.
 
-* <YUOR-REGION-CODE>
-* <YOUR-COGNITO-IDENTITY-POOL-ID>
+* YUOR-REGION-CODE
+* YOUR-COGNITO-IDENTITY-POOL-ID
 
 ```JavaScript
 
@@ -210,7 +210,7 @@ Now you can modify the code of `index.html` and `draw.html` files.
 ```
 
 Modify the code of in the `index.html` and `draw.html` files.
-* <DDB-TABLE-NAME>
+* DDB-TABLE-NAME
 ```
         var params = {
             //TODO #3: Update <DDB-TABLE-NAME> to your actual DDB-TABLE-NAME.
