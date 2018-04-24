@@ -226,4 +226,13 @@ Modify the code of in the `index.html` and `draw.html` files.
         };
 ```
 
+# Step 9
+Now, you can test this app several ways if your AWS resources are ready!
+* Local file access via your web browser.
+* Or, using local webser such `python -m http.server 8000`.
+* Or, deploy it to the static web hosting enabled S3 bucket.
+
+Enjoy it!
+
+Thanks.
 
