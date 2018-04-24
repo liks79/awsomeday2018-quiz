@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>:: AWSOMEDAY 2018 :: Seoul Summit</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="static/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="static/css/awsomeday.css" rel="stylesheet">
+    <!-- Fontawesome for vectorized icons -->
+    <script defer src="static/js/all.js"></script>
+
+    <!-- AWS SDK -->
+    <script src="static/js/aws-sdk-2.222.1.min.js"></script>
+
+    <script>
+
+      //TODO #1: Update <YUOR-REGION-CODE> to your actual region code. (ex:ap-northeast-2)  
+      AWS.config.region = "<YUOR-REGION-CODE>";
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        //TODO #2: Update <YOUR-COGNITO-IDENTITY-POOL-ID> to your actual pool id.
+        IdentityPoolId: "<YOUR-COGNITO-IDENTITY-POOL-ID>"
+      });
+
+
+      function postAnswer() {
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        var currDate = (new Date()).toISOString();
+        //Assuming the correct answer is third choice.
+        var solutionChecked = $('#answer_03').is(":checked");
+
+        var params = {
+            //TODO #3: Update <DDB-TABLE-NAME> to your actual DDB-TABLE-NAME.
+            TableName :"<DDB-TABLE-NAME>",
+            Item:{
+                "eventName": "awsomeday2018",
+                "date": currDate,
+                "name": $('#name').val(),
+                "phoneNum": $('#phoneNum').val(),
+                "answer": solutionChecked,
+                "userAgent": navigator.userAgent
+            }
+        };
+        docClient.put(params, function(err, data) {
+            if (err) {
+              msgbox("Please try again!");
+            } else {
+              msgbox("Registered!");
+              setTimeout(function(){
+                location.replace("thanks.html");
+              },1500);
+            }
+        });
+      }
+
+      //customized bootbox.alert function
+      function msgbox(msg) {
+        bootbox.alert({
+            message: msg,
+            size: 'small'
+        }).find('.modal-content').css({
+            'margin-top': function (){
+                var w = $( window ).height();
+                var b = $(".modal-dialog").height();
+                // should not be (w-h)/2
+                var h = ((w-b)/2)-50;
+                return h+"px";
+            }
+        });
+      }
+    </script>
+
+  </head>
+
+  <body class="bg-dark">
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="text-center text-white mb-4"><i class="fab fa-aws"></i> <strong>AWS</strong>OME<strong>DAY</strong> 2018</h2>
+          <div class="row">
+            <div class="col-md-6 mx-auto">
+
+              <!-- form card login -->
+              <div class="card rounded">
+                <div class="card-header">
+                  <h3 class="mb-0"><i class="fas fa-question-circle"></i> Quiz#1</h3>
+                </div>
+                <div class="card-body">
+                  <form class="form-signin" id="quiz">
+
+                  <p>
+                    <strong>How many regions are in the AWS global infrastructure?</strong>
+                  </p>
+                  <p>
+                    <div class="form-check">
+                      <label class="radio-inline"><input type="radio" id="answer_01" name="answers"> 14 </label>&nbsp;
+                      <label class="radio-inline"><input type="radio" id="answer_02" name="answers"> 16 </label>&nbsp;
+                      <label class="radio-inline"><input type="radio" id="answer_03" name="answers" checked> <strong>18</strong> </label>&nbsp;
+                      <label class="radio-inline"><input type="radio" id="answer_04" name="answers"> 20 </label>
+                    </div>
+                  </p>
+
+                  <div class="form-label-group">
+                    <input type="text" id="name" class="form-control" placeholder="Name" required autofocus>
+                    <label for="name"><i class="fas fa-user"></i> Name</label>
+                  </div>
+
+                  <div class="form-label-group">
+                    <input type="text" id="phoneNum" class="form-control" placeholder="Phone Number" required>
+                    <label for="phoneNum"><i class="fas fa-mobile-alt"></i> Last four digits of cell phone number</label>
+                  </div>
+
+                  <!--
+                  <button class="btn btn-lg btn-dark btn-block" type="submit"><i class="fas fa-check"></i> Submit</button>
+                  -->
+                  <button class="btn btn-lg btn-dark btn-block" id="postAnswer" type="button"><i class="fas fa-check"></i> Submit</button>
+
+                  </form>
+                </div>
+                <!--/card-block-->
+              </div>
+              <!-- /form card login -->
+
+
+            </div>
+          </div>
+          <!--/row-->
+        </div>
+        <!--/col-->
+      </div>
+      <!--/row-->
+      <p class="text-center text-white mb-4">Powered by Amazon <a href="https://aws.amazon.com/ko/s3/index.html" target="_blank">S3</a>, <a href="https://aws.amazon.com/ko/cognito/" target="_blank">Cognito</a> and <a href="https://aws.amazon.com/ko/dynamodb/index.html" target="_blank">DynamoDB</a></p>
+
+
+    </div>
+    <!--/container-->
+
+    <!-- jQuery JavaScript -->
+    <script src="static/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="static/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootbox -->
+    <script src="static/js/bootbox.min.js"></script>
+
+
+    <script>
+
+      $("#postAnswer").click(function( event ) {
+        var flag = validateInput();
+        if(flag) {
+          postAnswer();
+        }
+      });
+
+
+      //for input value validation
+      function validateInput(){
+
+        var name = $('#name').val();
+        var phoneNum = $('#phoneNum').val();
+        var numPattern = new RegExp("[0-9][0-9][0-9][0-9]");
+        var nameAntiPattern = new RegExp("([0-9])");
+
+        if( name == '') {
+          msgbox("Please type your name.");
+          $('#name').focus();
+          return false;
+        }
+
+        if(nameAntiPattern.test(name)) {
+          msgbox("Numbers in the name is not allowed.");
+          $('#name').focus();
+          return false;
+        }
+
+        if(phoneNum == '' || !numPattern.test(phoneNum) || phoneNum.length != 4) {
+          msgbox("Please enter the last four digits of your cell phone (numbers only)");
+          $('#phoneNum').focus();
+          return false;
+        }
+        return true;
+      }
+    </script>
+
+
+  </body>
+</html>
+
